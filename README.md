@@ -4,5 +4,6 @@ Integrate background services on [pandao/editor.md](https://github.com/pandao/ed
 ## Build Setup
 ```shell
 > go get github.com/linyuy/editor
-> go install github.com/linyuy/editor && editor
+> cd $GOPATH/src/github.com/linyuy/editor
+> go build && editor
 ```

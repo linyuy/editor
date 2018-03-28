@@ -1,0 +1,15 @@
+language: go
+
+go:
+  - 1.9
+  - tip
+
+notifications:
+  email: false
+
+before_install:
+
+#install: true
+
+script:
+  - go test -v ./...
