@@ -11,4 +11,5 @@ WORKDIR $GOPATH/src/github.com/linyuy/editor
 
 RUN go build
 
+ENV PATH $GOPATH/src/github.com/linyuy/editor:$PATH
 CMD ["editor -p 80"]
