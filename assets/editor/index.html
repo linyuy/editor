@@ -93,20 +93,14 @@
     <body>
         <div id="layout">
             <header>
-                <h1>完整示例</h1>
-                <p>Full example</p>
-                <ul style="margin: 10px 0 0 18px;">
-                    <li>Enable HTML tags decode</li>
-                    <li>Enable TeX, Flowchart, Sequence Diagram, Emoji, FontAwesome, Task lists</li>
-                    <li>Enable Image upload</li>
-                    <li>Enable [TOCM], Search Replace, Code fold</li>
-                </ul>            
+                <h1>Markdown Editor</h1>
             </header>
             <div class="btns">
                 <button id="goto-line-btn">Goto line 90</button>
                 <button id="show-btn">Show editor</button>
                 <button id="hide-btn">Hide editor</button>
                 <button id="get-md-btn">Get Markdown</button>
+                <button id="save-md-btn">Save Markdown</button>
                 <button id="get-html-btn">Get HTML</button>
                 <button id="watch-btn">Watch</button>
                 <button id="unwatch-btn">Unwatch</button>
@@ -187,7 +181,27 @@
                 $("#get-md-btn").bind('click', function(){
                     alert(testEditor.getMarkdown());
                 });
-                
+
+                $("#save-md-btn").bind('click', function(){
+                    var form = new FormData();
+                    form.append("markdown", testEditor.getMarkdown());
+
+                    $.ajax({
+                        url:"../../upload",
+                        type:"post",
+                        data:form,
+                        processData:false,
+                        contentType:false,
+                        success:function(data){
+                            console.log("over..");
+                        },
+                        error:function(e){
+                            alert("501");
+                            console.log(e);
+                        }
+                    });
+                });
+
                 $("#get-html-btn").bind('click', function() {
                     alert(testEditor.getHTML());
                 });                

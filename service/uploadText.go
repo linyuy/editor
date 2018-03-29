@@ -20,49 +20,27 @@ import (
 //     Time     int64  `json:"created_at"`
 // }
 
-// ResImage : response of save image
-type ResImage struct {
+// ResText : response of save text
+type ResText struct {
     Status      int32 `json:"success"`
     URL         string `json:"url"`
     Message     string `json:"message"`
 }
 
-func saveImageError(formatter *render.Render, w http.ResponseWriter, err error)  {
+func saveTextError(formatter *render.Render, w http.ResponseWriter, err error)  {
     formatter.JSON(w, http.StatusNotAcceptable, 
-        ResImage{
+        ResText{
             Status: 0,
             URL: "",
             Message: err.Error() })
 }
 
-func getImageExtension(imageBytes []byte) string {
-    fileType := http.DetectContentType(imageBytes)
-
-    switch fileType {
-    case "image/jpeg", "image/jpg":
-        return "jpg"
-    case "image/gif":
-        return "gif"
-    case "image/png":
-        return "png"
-    case "application/pdf":
-        return "pdf"
-    default:
-        return ""
-    }
-}
-
-func saveImage(imageBytes []byte, imageName string, imageFile io.Reader) (string, error) {
-
-    extension := getImageExtension(imageBytes)
-    if len(extension) == 0 {
-        return "", errors.New("Unsupported file types")
-    }
+func saveMd(imageBytes []byte, imageName string, imageFile io.Reader) (string, error) {
 
     md5Checksum := md5.Sum(imageBytes)
 
     // format file name
-    uploadFilePath := fmt.Sprintf("/images/upload/%x-%v.%v", md5Checksum, imageName, extension)
+    uploadFilePath := fmt.Sprintf("/images/upload/%x-%v.%v", md5Checksum, imageName, ".md")
     uploadedFile, err := os.Create("./assets" + uploadFilePath)
     if err != nil {
         return "", errors.New("Unable to create the file for writing. Check your write access privilege")
@@ -77,7 +55,7 @@ func saveImage(imageBytes []byte, imageName string, imageFile io.Reader) (string
     return uploadFilePath, nil
 }
 
-func saveImageHandler(formatter *render.Render) http.HandlerFunc {
+func saveMdHandler(formatter *render.Render) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, req *http.Request) {
 
@@ -113,7 +91,7 @@ func saveImageHandler(formatter *render.Render) http.HandlerFunc {
         }
 
         formatter.JSON(w, http.StatusOK, 
-            ResImage{
+            ResText{
                 Status: 1,
                 URL: "http://" + req.Host + "/static" + url,
                 Message: "" })
