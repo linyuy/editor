@@ -1,0 +1,1 @@
+web: ngzk-editor
